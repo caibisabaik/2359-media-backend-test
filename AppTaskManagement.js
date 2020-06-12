@@ -44,13 +44,14 @@ class AppTaskManagement {
                         let childrenRes = await this.addTask(task.children);
                         res.childrenRes = childrenRes;
                     }
-                    result.result.push(res);   
                 }
+                result.result.push(res);   
             }
             resolve(result);
         });
     }
 
+    // input = { 'dateStart', 'dateEnd', 'startTime', 'endTime', 'location', 'userId'}
     queryTimeLocation(arg) {
         return new Promise (async resolve => {
             let result = {error:null, result:null};
@@ -58,6 +59,7 @@ class AppTaskManagement {
             resolve(result);
         });
     }
+    
     // registerUser(arg) {
     //     return new Promise (resolve => {
     //         this.pgApi.registerUser(arg).then(res => {

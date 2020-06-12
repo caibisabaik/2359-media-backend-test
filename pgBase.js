@@ -129,24 +129,70 @@ class PgBase {
                 // check if date n time clashes
                 result = await this.checkClashedTask(arg);
                 if(result.error === null) {
-                    this.models['task'].create(arg).then(res => {
-                        result.result = res;
-                        resolve(result);
-                    }).catch(e => {
+                    if(Array.isArray(result.result) && result.result.length > 0) {
                         result.error = true;
-                        result.result = e;
                         resolve(result);
-                    });
+                    } else {
+                        this.models['task'].create(arg).then(res => {
+                            result.result = res;
+                            resolve(result);
+                        }).catch(e => {
+                            result.error = true;
+                            result.result = e;
+                            resolve(result);
+                        });
+                    }
                 }
+            } else {
+                resolve(result);
             }
         });
     }
 
     checkClashedTask (arg) {
         return new Promise(resolve => {
+            console.log('test');
             let result = this.pgPreflightCheck(arg, ['date', 'startTime', 'endTime','userId']);
             if(result.error === null) {
-                resolve(result);
+                this.models['task'].findAll({
+                    where: {
+                        userId : arg.userId,
+                        date : arg.date,
+                        [Op.or] : [
+                            {
+                                startTime : {
+                                    [Op.gte] : arg.startTime
+                                },
+                                endTime : {
+                                    [Op.lte] : arg.startTime
+                                }
+                            },
+                            {
+                                endTime : {
+                                    [Op.gte] : arg.endTime
+                                },
+                                startTime : {
+                                    [Op.lte] : arg.endTime
+                                }
+                            },
+                            {
+                                endTime : {
+                                    [Op.gte] : arg.startTime
+                                },
+                                startTime : {
+                                    [Op.lte] : arg.endTime
+                                }
+                            }
+                        ],
+                    }
+                }).then(res => {
+                    result.result = res;
+                    resolve(result);
+                }).catch(e => {
+                    result.error = true;
+                    result.result = e;
+                    resolve(result);
+                });
             } else {
                 // send error response
                 resolve(result);
@@ -183,6 +229,9 @@ class PgBase {
                             result.result = e;
                             resolve(result);
                         });
+                    } else {
+                        // send error response
+                        resolve(result);
                     }
                 } else {
                     result = this.pgPreflightCheck(arg, ['dateStart', 'dateEnd', 'startTime', 'endTime','userId']);
@@ -208,6 +257,9 @@ class PgBase {
                             result.result = e;
                             resolve(result);
                         });
+                    } else {
+                        // send error response
+                        resolve(result);
                     }
                 }
             } else {
@@ -226,6 +278,9 @@ class PgBase {
                         result.result = e;
                         resolve(result);
                     });
+                } else {
+                    // send error response
+                    resolve(result);
                 }
             }
         });
