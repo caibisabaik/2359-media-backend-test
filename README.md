@@ -1,4 +1,4 @@
-# mitrais-task
+# 2359-media-task
 Task Management System\
 Backend using node.js with express, RestApi, sequelize as ORM manage connection to PostgreSQL\
 
