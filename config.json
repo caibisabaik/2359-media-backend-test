@@ -1,0 +1,20 @@
+{
+    "http": {
+        "port": 8008,
+        "bind": "0.0.0.0"
+    },
+    "ssl": {
+        "enabled": false,
+        "key": "",
+        "cert": ""
+    },
+    "sql": {
+        "user" : "airlanggaputerapanigoro",
+        "host": "localhost",
+        "port" : 5432,
+        "password" : "",
+        "database" : "tasksystem",
+        "defaultDatabase" : "atapteduh"
+    },
+    "apiEndpoint": "localhost:8008"
+}
