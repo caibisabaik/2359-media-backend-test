@@ -30,6 +30,21 @@ class AppTaskManagement {
 
     // input = {[]tasks}
     // tasks = { 'title', 'date', 'startTime', 'endTime', 'frequencyType', 'parentId', 'userId' , {'children{tasks[]}', 'frequencyInterval}}
+    // frequencyType = {
+    // 0: Once
+    // 1: Daily
+    // 2: Weekly
+    // 3: Monthly
+    // 4: Annually
+    // }
+    // 
+    // frequencyInterval = {
+    // if type 0 then n = 0 (no interval)
+    // if type 1 then n is number of days interval
+    // if type 2 then n is 1-7 for day of yhe week
+    // if type 3 then n is 1-31 for day of the month
+    // if type 4 then n is 1-365 for day of the year
+    //     
     addTask(arg) {
         return new Promise (async resolve => {
             let result = {error:null, result:[]};
